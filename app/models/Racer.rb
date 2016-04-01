@@ -33,4 +33,10 @@ class Racer
 		@secs=params[:secs].to_i
 
 	end
+
+	def self.find id
+		id = id.is_a?(BSON::ObjectId) ? id : BSON::ObjectId(id)
+		result = collection.find(:_id => id).first
+		return result.nil? ? nil : Racer.new(result)
+	end
 end
