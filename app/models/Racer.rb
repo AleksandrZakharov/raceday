@@ -35,8 +35,36 @@ class Racer
 	end
 
 	def self.find id
+
 		id = id.is_a?(BSON::ObjectId) ? id : BSON::ObjectId(id)
 		result = collection.find(:_id => id).first
 		return result.nil? ? nil : Racer.new(result)
+
+	end
+
+	def save
+
+		result=self.class.collection.insert_one(_id:@id, number:@number, first_name:@first_name, last_name:@last_name, gender:@gender, group:@group, secs:@secs)
+		@id=result.inserted_id
+
+	end
+
+	def update(params)
+
+		@number=params[:number].to_i
+		
+		@first_name=params[:first_name]
+
+		@last_name=params[:last_name]
+
+		@gender = params[:gender]
+
+		@group = params[:group]
+
+		@secs=params[:secs].to_i
+
+		params.slice!(:number, :first_name, :last_name, :gender, :group, :secs)
+		
+		self.class.collection.find(_id:@id).update_one(params)
 	end
 end
