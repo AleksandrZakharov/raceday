@@ -15,4 +15,22 @@ class Racer
 		result = result.limit(limit) if !limit.nil?
 		return result
 	end
+
+	def initialize(params={})
+
+		@id=params[:_id].nil? ? params[:id] : params[:_id].to_s
+
+		@number=params[:number].to_i
+
+		@first_name=params[:first_name]
+
+		@last_name=params[:last_name]
+
+		@gender=params[:gender]
+
+		@group=params[:group]
+
+		@secs=params[:secs].to_i
+
+	end
 end
