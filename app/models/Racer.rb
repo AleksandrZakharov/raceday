@@ -64,7 +64,7 @@ class Racer
 		@secs=params[:secs].to_i
 
 		params.slice!(:number, :first_name, :last_name, :gender, :group, :secs)
-		
-		self.class.collection.find(_id:@id).update_one(params)
+
+		self.class.collection.find(_id: BSON::ObjectId(@id)).update_one(params)
 	end
 end
