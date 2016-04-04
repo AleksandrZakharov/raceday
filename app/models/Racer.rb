@@ -21,7 +21,7 @@ class Racer
 		nil
 
 	end
-	
+
 	def self.mongo_client
 		Mongoid::Clients.default
 	end
@@ -34,6 +34,32 @@ class Racer
 		result = collection.find(prototype).sort(sort).skip(skip)
 		result = result.limit(limit) if !limit.nil?
 		return result
+	end
+
+	def self.paginate(params)
+
+		page=(params[:page] || 1).to_i
+
+		limit=(params[:per_page] || 30).to_i
+
+		skip=(page-1)*limit
+
+		sort = {:number => 1}
+
+		racers=[]
+
+		all(params,sort,skip,limit).each do |doc|
+			racers << Racer.new(doc)
+		end
+		
+		total=all(params, sort, 0, 1).count
+
+		puts total
+
+		WillPaginate::Collection.create(page, limit, total) do |pager|
+
+			pager.replace(racers)
+		end
 	end
 
 	def initialize(params={})
