@@ -1,7 +1,27 @@
 class Racer
 
+	include ActiveModel::Model
+
 	attr_accessor :id, :number, :first_name, :last_name, :gender, :group, :secs
 
+	def persisted?
+
+		!@id.nil?
+
+	end
+
+	def created_at
+
+		nil
+
+	end
+
+	def updated_at
+
+		nil
+
+	end
+	
 	def self.mongo_client
 		Mongoid::Clients.default
 	end
@@ -66,5 +86,11 @@ class Racer
 		params.slice!(:number, :first_name, :last_name, :gender, :group, :secs)
 
 		self.class.collection.find(_id: BSON::ObjectId(@id)).update_one(params)
+	end
+
+	def destroy
+
+		self.class.collection.find(number:@number).delete_one
+
 	end
 end
