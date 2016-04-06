@@ -31,6 +31,7 @@ class Racer
 	end
 
 	def self.all(prototype={},sort={:number => 1},skip=0,limit=nil)
+		prototype=prototype.symbolize_keys.slice(:number, :first_name, :last_name, :gender, :group, :secs) if !prototype.nil?
 		result = collection.find(prototype).sort(sort).skip(skip)
 		result = result.limit(limit) if !limit.nil?
 		return result
@@ -53,8 +54,6 @@ class Racer
 		end
 		
 		total=all(params, sort, 0, 1).count
-
-		puts total
 
 		WillPaginate::Collection.create(page, limit, total) do |pager|
 
